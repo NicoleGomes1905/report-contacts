@@ -1,0 +1,28 @@
+.retro-button {
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  background: linear-gradient(135deg, #204a87 0%, #2f6ec6 100%);
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(47, 110, 198, 0.24);
+}
+
+.retro-button.secondary {
+  border: 1px solid #d7dfec;
+  background: #f8fbff;
+  color: #16325c;
+  box-shadow: none;
+}
+
+.retro-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.retro-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

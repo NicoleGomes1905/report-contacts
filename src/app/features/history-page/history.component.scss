@@ -1,0 +1,214 @@
+:host {
+  display: block;
+  min-height: 100%;
+  width: 100%;
+  padding: 16px 18px 28px;
+  background:
+    radial-gradient(circle at top right, rgba(33, 121, 103, 0.11), transparent 30%),
+    linear-gradient(180deg, #f5f7fb 0%, #edf3fb 100%);
+}
+
+.history-page {
+  width: min(100%, 1440px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e3e8f1;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  padding: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #607089;
+}
+
+h1,
+h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: #64748b;
+}
+
+.history-header,
+.section-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.history-controls,
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.control-field span,
+.metric-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #607089;
+}
+
+.control-field select {
+  padding: 10px 12px;
+  border: 1px solid #d7dfec;
+  border-radius: 12px;
+  background: #f8fbff;
+  font: inherit;
+  color: #16325c;
+}
+
+.years-grid,
+.summary-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.years-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: 14px;
+}
+
+.summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.year-card,
+.metric-card {
+  border: 1px solid #dbe5f3;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fcfdff 0%, #f5f9ff 100%);
+}
+
+.year-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px;
+  text-align: left;
+  font: inherit;
+  color: #16325c;
+  cursor: pointer;
+}
+
+.year-card strong,
+.metric-card strong {
+  font-size: 1.1rem;
+  color: #0f274a;
+}
+
+.year-card span {
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+.year-card.active {
+  border-color: #2f6ec6;
+  box-shadow: inset 0 0 0 1px #2f6ec6;
+}
+
+.metric-card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-table {
+  padding-bottom: 16px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid #d8e0ee;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  margin-top: 14px;
+}
+
+table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px 8px;
+  text-align: center;
+  border-bottom: 1px solid #e5edf8;
+  color: #334155;
+  font-size: 0.84rem;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: #f8fbff;
+  color: #16325c;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.name-column,
+.name-cell {
+  text-align: left;
+  min-width: 180px;
+}
+
+.name-cell {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.period-column,
+.active-period {
+  background: #edf5ff;
+}
+
+.strong-cell {
+  font-weight: 700;
+  color: #16325c;
+}
+
+.summary-row td {
+  background: #eef5ff;
+  font-weight: 700;
+}
+
+.empty-state {
+  padding: 32px 18px;
+  color: #64748b;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.empty-card {
+  text-align: center;
+}

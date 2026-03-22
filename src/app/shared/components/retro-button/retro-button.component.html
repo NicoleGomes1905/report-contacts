@@ -1,0 +1,8 @@
+<button
+  class="retro-button"
+  [class.secondary]="variant() === 'secondary'"
+  [attr.type]="type()"
+  [disabled]="disabled()"
+>
+  <ng-content />
+</button>

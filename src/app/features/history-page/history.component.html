@@ -1,0 +1,190 @@
+<div class="history-page">
+  <section class="history-header card">
+    <div>
+      <p class="eyebrow">Histórico</p>
+      <h1>Relatórios salvos</h1>
+      <p class="subtitle">Consulte os relatórios salvos por ano ou período.</p>
+    </div>
+
+    <div class="history-controls">
+      <label class="control-field">
+        <span>Ano</span>
+        <select [value]="selectedYear() ?? ''" (change)="onYearChange($any($event.target).value)">
+          @for (entry of historyEntries(); track entry.year) {
+            <option [value]="entry.year">{{ entry.year }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="control-field">
+        <span>Periodo</span>
+        <select [value]="selectedPeriod()" (change)="onPeriodChange($any($event.target).value)">
+          <option [value]="0">Anual</option>
+          @for (month of months; track month.value) {
+            <option [value]="month.value">{{ month.fullLabel }}</option>
+          }
+        </select>
+      </label>
+    </div>
+  </section>
+
+  @if (hasHistory()) {
+    <section class="saved-years card">
+      <div class="section-top">
+        <div>
+          <p class="eyebrow">Anos salvos</p>
+          <h2>Escolha um painel</h2>
+        </div>
+
+        <div class="top-actions">
+          <app-retro-button
+            variant="secondary"
+            [disabled]="selectedYear() === null"
+            (click)="removeSelectedYear()"
+          >
+            Remover ano
+          </app-retro-button>
+          <app-retro-button
+            variant="secondary"
+            [disabled]="!hasHistory()"
+            (click)="clearHistory()"
+          >
+            Limpar histórico
+          </app-retro-button>
+        </div>
+      </div>
+
+      <div class="years-grid">
+        @for (entry of historyEntries(); track entry.year) {
+          <button
+            class="year-card"
+            type="button"
+            [class.active]="entry.year === selectedYear()"
+            (click)="loadYear(entry.year)"
+          >
+            <strong>{{ entry.year }}</strong>
+            <span>{{ entry.analystCount }} analistas</span>
+            <span>{{ entry.filledMonths }} meses com dados</span>
+            <span>{{ entry.totalCalls | number: '1.0-0' }} chamadas</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    @if (selectedHistoryEntry(); as historyEntry) {
+      <section class="summary-grid">
+        <article class="metric-card card">
+          <span class="metric-label">Ano selecionado</span>
+          <strong>{{ historyEntry.year }}</strong>
+        </article>
+        <article class="metric-card card">
+          <span class="metric-label">Periodo</span>
+          <strong>{{ selectedMonthLabel() }}</strong>
+        </article>
+        <article class="metric-card card">
+          <span class="metric-label">Analistas</span>
+          <strong>{{ visibleRows().length }}</strong>
+        </article>
+        <article class="metric-card card">
+          <span class="metric-label">Total de chamadas</span>
+          <strong>
+            {{
+              selectedPeriod() === 0
+                ? summaryRow().totalCalls
+                : summaryRow().monthlyCalls[selectedPeriod() - 1]
+              | number: '1.0-0'
+            }}
+          </strong>
+        </article>
+      </section>
+    }
+
+    <section class="history-table card">
+      <div class="section-top">
+        <div>
+          <p class="eyebrow">Painel</p>
+          <h2>Visualização do histórico</h2>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th class="name-column">Nome</th>
+              @if (selectedPeriod() === 0) {
+                @for (month of months; track month.value) {
+                  <th>{{ month.shortLabel }}</th>
+                }
+                <th>Total de chamadas</th>
+                <th>Num Meses</th>
+                <th>Media Mensal</th>
+              } @else {
+                <th class="period-column">{{ selectedMonthLabel() }}</th>
+                <th>Total anual</th>
+                <th>Num Meses</th>
+                <th>Media Mensal</th>
+              }
+            </tr>
+          </thead>
+
+          <tbody>
+            @if (visibleRows().length) {
+              @for (row of visibleRows(); track row.key) {
+                <tr>
+                  <td class="name-cell">{{ row.name }}</td>
+                  @if (selectedPeriod() === 0) {
+                    @for (monthlyCalls of row.monthlyCalls; track $index) {
+                      <td [class.active-period]="isActivePeriod($index + 1)">
+                        {{ monthlyCalls || '-' }}
+                      </td>
+                    }
+                    <td class="strong-cell">{{ row.totalCalls }}</td>
+                    <td>{{ row.activeMonths || '-' }}</td>
+                    <td>{{ row.monthlyAverage | number: '1.0-2' }}</td>
+                  } @else {
+                    <td class="active-period">{{ row.monthlyCalls[selectedPeriod() - 1] }}</td>
+                    <td class="strong-cell">{{ row.totalCalls }}</td>
+                    <td>{{ row.activeMonths || '-' }}</td>
+                    <td>{{ row.monthlyAverage | number: '1.0-2' }}</td>
+                  }
+                </tr>
+              }
+
+              <tr class="summary-row">
+                <td class="name-cell">{{ summaryRow().name }}</td>
+                @if (selectedPeriod() === 0) {
+                  @for (monthlyCalls of summaryRow().monthlyCalls; track $index) {
+                    <td [class.active-period]="isActivePeriod($index + 1)">
+                      {{ monthlyCalls || '-' }}
+                    </td>
+                  }
+                  <td class="strong-cell">{{ summaryRow().totalCalls }}</td>
+                  <td>{{ summaryRow().activeMonths || '-' }}</td>
+                  <td>{{ summaryRow().monthlyAverage | number: '1.0-2' }}</td>
+                } @else {
+                  <td class="active-period">{{ summaryRow().monthlyCalls[selectedPeriod() - 1] }}</td>
+                  <td class="strong-cell">{{ summaryRow().totalCalls }}</td>
+                  <td>{{ summaryRow().activeMonths || '-' }}</td>
+                  <td>{{ summaryRow().monthlyAverage | number: '1.0-2' }}</td>
+                }
+              </tr>
+            } @else {
+              <tr>
+                <td class="empty-state" [attr.colspan]="selectedPeriod() === 0 ? 16 : 5">
+                  Nenhum registo encontrado para o filtro selecionado.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  } @else {
+    <section class="empty-card card">
+      <p class="eyebrow">Histórico</p>
+      <h2>Nenhum relatório salvo</h2>
+      <p class="subtitle">Salve um painel na página principal para o histórico aparecer aqui.</p>
+    </section>
+  }
+</div>

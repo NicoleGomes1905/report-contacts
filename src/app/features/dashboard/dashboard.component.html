@@ -1,0 +1,161 @@
+<div class="dashboard-content">
+  <section class="dashboard-header">
+    <div class="section-title">
+      <h1>Relatorio Anual GoContact</h1>
+      <p>Totais de chamadas HD</p>
+    </div>
+  </section>
+
+  <app-dropzone
+    [months]="months"
+    [selectedMonth]="selectedMonth()"
+    (selectedMonthChange)="onMonthChange($event)"
+    (filesDropped)="receiveFiles($event)"
+  />
+
+  <section class="status-card">
+    <div>
+      <p class="status-label">Status</p>
+      <p class="status-message">{{ feedbackMessage() }}</p>
+      @if (importedFileName()) {
+        <p class="status-file">Ultimo ficheiro: {{ importedFileName() }}</p>
+      }
+      @if (selectedPeriodLabel()) {
+        <p class="status-file">Periodo identificado: {{ selectedPeriodLabel() }}</p>
+      }
+    </div>
+
+    @if (isBusy()) {
+      <span class="status-chip">A processar...</span>
+    } @else if (hasImportedSnapshot()) {
+      <span class="status-chip ready">Pré-visualização pronta</span>
+    }
+  </section>
+
+  <section class="table-card">
+    <div class="table-header">
+      <div>
+        <h2>Painel de Dados</h2>
+        @if (isEditing()) {
+          <p class="table-helper">Edite valores, adicione analistas ou remova linhas antes de salvar.</p>
+        }
+      </div>
+
+      <button class="edit-toggle" type="button" (click)="toggleEditing()">
+        {{ isEditing() ? 'Concluir' : 'Editar' }}
+      </button>
+    </div>
+
+    @if (isEditing()) {
+      <div class="table-actions">
+        <div class="add-analyst">
+          <input
+            class="analyst-input"
+            type="text"
+            placeholder="Novo analista"
+            [value]="newAnalystName()"
+            (input)="updateNewAnalystName($any($event.target).value)"
+          />
+          <button class="ghost-toggle" type="button" (click)="addAnalyst()">Adicionar</button>
+        </div>
+      </div>
+    }
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th class="name-column">Nome</th>
+            @for (month of months; track month.value) {
+              <th>{{ month.shortLabel }}</th>
+            }
+            <th>Total de chamadas</th>
+            <th>Num Meses</th>
+            <th>Media Mensal</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @if (tableRows().length) {
+            @for (row of tableRows(); track row.key) {
+              <tr>
+                <td class="name-cell">
+                  <div class="name-content">
+                    <span class="name-label" [title]="row.name">{{ row.name }}</span>
+                    @if (isEditing()) {
+                      <button
+                        class="remove-analyst inline-remove"
+                        type="button"
+                        title="Remover analista"
+                        aria-label="Remover analista"
+                        (click)="removeAnalyst(row.key)"
+                      >
+                        &times;
+                      </button>
+                    }
+                  </div>
+                </td>
+                @for (monthlyCalls of row.monthlyCalls; track $index) {
+                  <td>
+                    @if (isEditing()) {
+                      <input
+                        class="cell-input"
+                        type="text"
+                        inputmode="numeric"
+                        [value]="getDraftValue(row.key, $index)"
+                        (input)="updateMonthlyValue(row.key, $index, $any($event.target).value)"
+                      />
+                    } @else {
+                      <span class="cell-value">{{ monthlyCalls || '-' }}</span>
+                    }
+                  </td>
+                }
+                <td class="strong-cell">{{ row.totalCalls }}</td>
+                <td>{{ row.activeMonths || '-' }}</td>
+                <td>{{ row.monthlyAverage | number: '1.0-2' }}</td>
+              </tr>
+            }
+
+            <tr class="summary-row">
+              <td class="name-cell">{{ summaryRow().name }}</td>
+              @for (monthlyCalls of summaryRow().monthlyCalls; track $index) {
+                <td>{{ monthlyCalls || '-' }}</td>
+              }
+              <td class="strong-cell">{{ summaryRow().totalCalls }}</td>
+              <td>{{ summaryRow().activeMonths || '-' }}</td>
+              <td>{{ summaryRow().monthlyAverage | number: '1.0-2' }}</td>
+            </tr>
+          } @else {
+            <tr>
+              <td class="empty-state" colspan="16">
+                @if (isEditing()) {
+                  Nenhum analista na tabela. Use o campo "Novo analista" para adicionar uma linha manualmente.
+                } @else if (hasImportedSnapshot()) {
+                  Nenhum registo encontrado para o ficheiro importado.
+                } @else {
+                  Nenhum dado disponivel. Faca o upload de um arquivo para comecar.
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="actions-card">
+    <app-retro-button variant="secondary" (click)="clearCurrentPanel()" [disabled]="isBusy()">
+      Limpar painel
+    </app-retro-button>
+    <app-retro-button (click)="saveReport()" [disabled]="isBusy()">
+      Salvar
+    </app-retro-button>
+    <app-retro-button
+      variant="secondary"
+      (click)="exportReport()"
+      [disabled]="isBusy() || !hasTableData()"
+    >
+      Exportar
+    </app-retro-button>
+  </section>
+</div>

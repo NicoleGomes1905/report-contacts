@@ -1,0 +1,21 @@
+<section class="import-report-card">
+  <div class="card-header">
+    <h2 class="card-title">Importar Dados</h2>
+  </div>
+
+  <label
+    class="drop-zone"
+    [class.dragging]="isDragging"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
+    <input class="file-input" type="file" accept=".xlsx,.csv" multiple (change)="onFileSelected($event)" />
+
+    <div class="drop-content">
+      <img src="upload_icon.png" alt="Upload de arquivo" />
+      <p class="main-text">Arraste aqui o extraido do GoContact</p>
+      <p class="sub-text">ou clique para selecionar um ou mais arquivos (.XLSX, .CSV)</p>
+    </div>
+  </label>
+</section>
