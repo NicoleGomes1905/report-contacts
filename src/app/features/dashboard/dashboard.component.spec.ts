@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
-import { DashboardComponent } from '../dashboard.component';
+import { DashboardComponent } from './dashboard.component';
 import { FileParserService } from '../../core/services/file-parser.service';
 import { StorageService } from '../../core/services/storage.service';
 import { StoredAnnualReport } from '../../core/models/relatorio.model';

@@ -110,12 +110,17 @@ export class DashboardComponent {
   }
 
   async exportReport() {
-    await this.storageService.exportReport(this.selectedYear(), [
-      ...this.tableRows(),
-      this.summaryRow(),
-    ]);
+    try {
+      await this.storageService.exportReport(this.selectedYear(), [
+        ...this.tableRows(),
+        this.summaryRow(),
+      ]);
 
-    this.feedbackMessage.set(`Relatorio exportado no modelo para ${this.selectedYear()}.`);
+      this.feedbackMessage.set(`Relatorio exportado no modelo para ${this.selectedYear()}.`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Erro ao exportar o relatorio.';
+      this.feedbackMessage.set(message);
+    }
   }
 
   toggleEditing() {

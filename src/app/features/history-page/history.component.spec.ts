@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 import { HistoryComponent } from './history.component';
-import { StorageService } from '../core/services/storage.service';
-import { ReportProcessorService } from '../core/services/report-processor.service';
+import { StorageService } from '../../core/services/storage.service';
+import { ReportProcessorService } from '../../core/services/report-processor.service';
 
 describe('HistoryComponent', () => {
   let component: HistoryComponent;

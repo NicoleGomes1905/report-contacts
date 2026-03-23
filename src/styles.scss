@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-* {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   font-family: 'Inter', sans-serif;
 }
 
@@ -12,8 +15,8 @@ html, body {
 }
 
 body {
-  min-width: 1200px;
-  overflow-x: auto;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 app-root {

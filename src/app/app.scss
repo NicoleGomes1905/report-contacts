@@ -70,3 +70,54 @@
 .content-area {
   min-width: 0;
 }
+
+@media (max-width: 960px) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    gap: 16px;
+    padding: 18px 16px;
+    border-right: none;
+    border-bottom: 1px solid #dbe5f3;
+    height: auto;
+  }
+
+  .brand {
+    padding: 0;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-nav a {
+    flex: 1 1 180px;
+    text-align: center;
+  }
+
+  .sidebar-nav a:hover,
+  .sidebar-nav a.active {
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    padding: 16px 12px;
+  }
+
+  .brand strong {
+    font-size: 1.25rem;
+  }
+
+  .brand p {
+    font-size: 0.92rem;
+  }
+
+  .sidebar-nav a {
+    flex-basis: 100%;
+  }
+}

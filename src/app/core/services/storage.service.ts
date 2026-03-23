@@ -7,6 +7,9 @@ import {
   StoredAnnualReportEntry,
 } from '../models/relatorio.model';
 
+type ExcelJSImport = typeof import('exceljs');
+type ExcelJSImportWithDefault = ExcelJSImport & { default?: ExcelJSImport };
+
 @Injectable({ providedIn: 'root' })
 export class StorageService {
   load(year: number): StoredAnnualReport {
@@ -53,7 +56,7 @@ export class StorageService {
   }
 
   async exportReport(year: number, rows: ReportTableRow[]): Promise<void> {
-    const ExcelJS = await import('exceljs');
+    const ExcelJS = await this.loadExcelJS();
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Relatorio');
 
@@ -87,6 +90,17 @@ export class StorageService {
     anchor.download = `relatorio-anual-${year}.xlsx`;
     anchor.click();
     URL.revokeObjectURL(url);
+  }
+
+  private async loadExcelJS(): Promise<ExcelJSImport> {
+    const excelJSImport = (await import('exceljs')) as ExcelJSImportWithDefault;
+    const excelJS = excelJSImport.default ?? excelJSImport;
+
+    if (!excelJS.Workbook) {
+      throw new Error('Nao foi possivel carregar a biblioteca de exportacao.');
+    }
+
+    return excelJS;
   }
 
   private readStorage(): Record<string, StoredAnnualReport> {
